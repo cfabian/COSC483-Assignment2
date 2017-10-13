@@ -7,8 +7,6 @@ from multiprocessing import Process,Manager, Pool
 import multiprocessing as mp
 import binascii
 
-# Credit to Chris Coe for this code
-# Requires pycrypto, which does indeed work for python3
 blocksize = 128
 keysize = 256
 
