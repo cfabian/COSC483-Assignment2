@@ -1,4 +1,5 @@
 import functions
+import sys
 
 if __name__ == "__main__":# Need some shit about the special way we are going to have him run our code
     mode = ''
