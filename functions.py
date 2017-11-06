@@ -1,3 +1,4 @@
+import random
 
 def readFile(funName, fileName):
     try:
@@ -7,19 +8,32 @@ def readFile(funName, fileName):
     except FileNotFoundError:
         print("{0}: key file: {1} not found".format(funName, fileName))
         exit()
-
+    
 def enc(keyFile, inputFile, outputFile):
     
     key = readFile('rsa-enc', keyFile).split('\n')
-    nBits = int(key[0])
-    n = int(key[1])
-    e = int(key[2])
+    if len(key) != 3:
+        print("rsa-enc: invalide key file")
+        exit()
+    
+    else:
+        nBits = int(key[0])
+        n = int(key[1])
+        e = int(key[2])
     
     plainText = readFile('rsa-enc', inputFile)
     
     print(plainText)
+    print(bin(int(plainText)))
     
-    cipherText = pow(int(plainText), e) % n
+    r = random.getrandbits(nBits // 2)
+    r = r << (nBits // 2)
+    m = r + int(plainText)
+    
+    print(m)
+    print(bin(m))
+    
+    cipherText = pow(m, e) % n
     
     print(cipherText)
     
@@ -29,21 +43,65 @@ def enc(keyFile, inputFile, outputFile):
 def dec(keyFile, inputFile, outputFile):
     
     key = readFile('rsa-dec', keyFile).split('\n')
-    nBits = int(key[0])
-    n = int(key[1])
-    d = int(key[2])
+    if len(key) != 3:
+        print("rsa-dec: invalide key file")
+        exit()
+    
+    else:
+        nBits = int(key[0])
+        n = int(key[1])
+        d = int(key[2])
     
     cipherText = readFile('rsa-dec', inputFile)
     
     print(cipherText)
     
-    plainText = pow(int(cipherText), d) % n
+    m = pow(int(cipherText), d) % n
+    print(m)
+    print(bin(m))
+    plainText = m & ((1 << nBits // 2) - 1)
     
     print(plainText)
+    print(bin(int(plainText)))
+    
+def isPrime(n):
+    if n < 2:
+        return False
+        
+    d = n - 1
+    t = 0
+    while d % 2 == 0:
+        d = d // 2 #Apparently the // operator explicitly does integer division. Cool.
+        t += 1
+        
+    for k in range(5):
+        a = random.randint(2, n - 2)
+        v = pow(a, d, n)
+        if v != 1:
+            i = 0
+            while v != (n - 1):
+                if i == t - 1:
+                    return False
+                    
+                else:
+                    i += 1
+                    v = pow(v, 2) % n
+                    
+    return True
+    
+def getRandPrime(n):
+    prime = 1
+    while not isPrime(prime):
+        random.randint(2, n)
+        
+    return prime
 
 def keygen(pubKeyFile, privKeyFile, numBits):
     
     print(pubKeyFile)
     print(privKeyFile)
     print(numBits)
+    
+    priv = getRandPrime(int(numBits))
+    print(priv)
     
