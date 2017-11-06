@@ -11,20 +11,21 @@ if __name__ == "__main__":# Need some shit about the special way we are going to
     # outputFile = None
     # ivFile = None
     
-    if not (len(sys.argv) == 7):
+    if not (len(sys.argv) == 8):
+        print(len(sys.argv))
         print("Usage: ./[rsa-enc/rsa-dec/rsa-keygen]")
         print("          -k <key file> : required, specifies a file storing a valid RSA key in the example format")
         print("          -i <input file> : required, specifies the path of the file containing an integer in Z∗n in String form (base 10) that is being operated on")
         print("          -o <output file> : required, specifies the path of the file where the resulting output is stored in String form (base 10)")
         exit()
         
-    elif sys.argv[0] == 'rsa-enc':
+    elif sys.argv[1] == 'rsa-enc':
         print("Do RSA Encryption")
         
-    elif sys.argv[0] == 'rsa-dec':
+    elif sys.argv[1] == 'rsa-dec':
         print("Do RSA Decryption")
         
-    elif sys.argv[0] == 'rsa-keygen':
+    elif sys.argv[1] == 'rsa-keygen':
         print("Do RSA Key Generation")
         
         
