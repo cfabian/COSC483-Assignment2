@@ -1,5 +1,6 @@
-import functions
 import sys
+
+import functions
 
 def printUsage():
     print("Usage: ./[rsa-enc/rsa-dec]")
@@ -18,7 +19,6 @@ if __name__ == "__main__":
         printUsage()
         
     elif sys.argv[1] == 'rsa-enc' or sys.argv[1] == 'rsa-dec':
-        print("Do RSA Encryption/Decryption")
     
         keyFile = ""
         inputFile = ""
@@ -42,12 +42,13 @@ if __name__ == "__main__":
         else:
             printUsage()
             
-        print(keyFile)
-        print(inputFile)
-        print(outputFile)
+        if sys.argv[1] == 'rsa-enc':
+            functions.enc(keyFile, inputFile, outputFile)
+            
+        else: #This has already been checked
+            functions.dec(keyFile, inputFile, outputFile)
         
     elif sys.argv[1] == 'rsa-keygen':
-        print("Do RSA Key Generation")
         
         pubKeyFile = ""
         privKeyFile = ""
@@ -71,6 +72,4 @@ if __name__ == "__main__":
         else:
             printUsage()
             
-        print(pubKeyFile)
-        print(privKeyFile)
-        print(numBits)
+        functions.keygen(pubKeyFile, privKeyFile, numBits)
