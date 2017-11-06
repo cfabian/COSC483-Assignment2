@@ -1,4 +1,5 @@
 import random
+from Crypto.Util import number
 
 def readFile(funName, fileName):
     try:
@@ -24,21 +25,21 @@ def enc(keyFile, inputFile, outputFile):
     plainText = readFile('rsa-enc', inputFile)
     
     print(plainText)
-    print(bin(int(plainText)))
+    # print(bin(int(plainText)))
     
     # Add the padding to the plain text
     r = random.getrandbits(nBits // 2)
     r = r << (nBits - (nBits // 2) - 2)
     m = r + int(plainText)
     
-    print(m)
-    print(bin(m))
+    # print(m)
+    # print(bin(m))
     
     # Calculate the cypher text
     cipherText = pow(m, e, n)
     
     print(cipherText)
-    print(bin(cipherText))
+    # print(bin(cipherText))
     
     with open(outputFile, 'w+') as o:
         o.write(str(cipherText))
@@ -58,17 +59,20 @@ def dec(keyFile, inputFile, outputFile):
     cipherText = readFile('rsa-dec', inputFile)
     
     print(cipherText)
-    print(bin(int(cipherText)))
+    # print(bin(int(cipherText)))
     
     # Calculate the plain text with the padding
     m = pow(int(cipherText), d, n)
-    print(m)
-    print(bin(m))
+    # print(m)
+    # print(bin(m))
     # Pull off the padding
     plainText = m & ((1 << nBits - (nBits // 2) - 2) - 1)
     
     print(plainText)
-    print(bin(int(plainText)))
+    # print(bin(int(plainText)))
+    
+    with open(outputFile, 'w+') as o:
+        o.write(str(plainText))
     
 def isPrime(n):
     if n < 2:
@@ -104,10 +108,8 @@ def getRandPrime(n):
 
 def keygen(pubKeyFile, privKeyFile, numBits):
     
-    print(pubKeyFile)
-    print(privKeyFile)
-    print(numBits)
-    
-    priv = getRandPrime(int(numBits))
-    print(priv)
+    prime1 = number.getPrime(int(numBits))
+    prime2 = number.getPrime(int(numBits))
+    print(prime1)
+    print(prime2)
     
