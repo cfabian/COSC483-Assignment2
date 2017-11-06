@@ -16,7 +16,7 @@ def enc(keyFile, inputFile, outputFile):
         print("rsa-enc: invalide key file")
         exit()
     
-    else:
+    else: # Pull info from public key
         nBits = int(key[0])
         n = int(key[1])
         e = int(key[2])
@@ -26,16 +26,19 @@ def enc(keyFile, inputFile, outputFile):
     print(plainText)
     print(bin(int(plainText)))
     
+    # Add the padding to the plain text
     r = random.getrandbits(nBits // 2)
-    r = r << (nBits // 2)
+    r = r << (nBits - (nBits // 2) - 2)
     m = r + int(plainText)
     
     print(m)
     print(bin(m))
     
-    cipherText = pow(m, e) % n
+    # Calculate the cypher text
+    cipherText = pow(m, e, n)
     
     print(cipherText)
+    print(bin(cipherText))
     
     with open(outputFile, 'w+') as o:
         o.write(str(cipherText))
@@ -47,7 +50,7 @@ def dec(keyFile, inputFile, outputFile):
         print("rsa-dec: invalide key file")
         exit()
     
-    else:
+    else: # Pull the info from the private key
         nBits = int(key[0])
         n = int(key[1])
         d = int(key[2])
@@ -55,11 +58,14 @@ def dec(keyFile, inputFile, outputFile):
     cipherText = readFile('rsa-dec', inputFile)
     
     print(cipherText)
+    print(bin(int(cipherText)))
     
-    m = pow(int(cipherText), d) % n
+    # Calculate the plain text with the padding
+    m = pow(int(cipherText), d, n)
     print(m)
     print(bin(m))
-    plainText = m & ((1 << nBits // 2) - 1)
+    # Pull off the padding
+    plainText = m & ((1 << nBits - (nBits // 2) - 2) - 1)
     
     print(plainText)
     print(bin(int(plainText)))
