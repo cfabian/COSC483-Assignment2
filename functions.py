@@ -105,11 +105,34 @@ def getRandPrime(n):
         random.randint(2, n)
         
     return prime
+    
+def isCoprime(x, y):
+    for z in range(2, min(x, y) + 1):
+        if (x % z) == (y % z) == 0:
+            return False
+            
+    return True
+    
+def getCoprime(order):
+    for e in range(3, order):
+        if isCoprime(e, order):
+            return e
+        
+    print("didn't find coprime with {0}".format(order))
+    exit()
 
 def keygen(pubKeyFile, privKeyFile, numBits):
     
-    prime1 = number.getPrime(int(numBits))
-    prime2 = number.getPrime(int(numBits))
-    print(prime1)
-    print(prime2)
+    p = number.getPrime(int(numBits))
+    q = number.getPrime(int(numBits))
+    print(p)
+    print(q)
+    n = p * q
+    order = (p -1) * (q - 1)
+    e = getCoprime(order)
+    print(n)
+    print(order)
+    print(e)
+    d = 1 / (e % order)
+    print(d)
     
