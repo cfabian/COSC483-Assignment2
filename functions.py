@@ -128,7 +128,7 @@ def keygen(pubKeyFile, privKeyFile, numBits):
     print(p)
     print(q)
     n = p * q
-    order = (p -1) * (q - 1)
+    order = (p - 1) * (q - 1)
     e = getCoprime(order)
     print(n)
     print(order)
