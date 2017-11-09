@@ -24,22 +24,13 @@ def enc(keyFile, inputFile, outputFile):
     
     plainText = readFile('rsa-enc', inputFile)
     
-    print(plainText)
-    # print(bin(int(plainText)))
-    
     # Add the padding to the plain text
     r = random.getrandbits(nBits // 2)
     r = r << (nBits - (nBits // 2) - 2)
     m = r + int(plainText)
     
-    # print(m)
-    # print(bin(m))
-    
     # Calculate the cypher text
     cipherText = pow(m, e, n)
-    
-    print(cipherText)
-    # print(bin(cipherText))
     
     with open(outputFile, 'w+') as o:
         o.write(str(cipherText))
@@ -58,18 +49,11 @@ def dec(keyFile, inputFile, outputFile):
     
     cipherText = readFile('rsa-dec', inputFile)
     
-    print(cipherText)
-    # print(bin(int(cipherText)))
-    
     # Calculate the plain text with the padding
     m = pow(int(cipherText), d, n)
-    # print(m)
-    # print(bin(m))
+    
     # Pull off the padding
     plainText = m & ((1 << nBits - (nBits // 2) - 2) - 1)
-    
-    print(plainText)
-    # print(bin(int(plainText)))
     
     with open(outputFile, 'w+') as o:
         o.write(str(plainText))
@@ -137,19 +121,18 @@ def modinv(a, m):
     else:
         return x % m
 
-
 def keygen(pubKeyFile, privKeyFile, numBits):
     
     p = number.getPrime(int(numBits))
     q = number.getPrime(int(numBits))
-    print(p)
-    print(q)
     n = p * q
     order = (p - 1) * (q - 1)
     e = getCoprime(order)
-    print(n)
-    print(order)
-    print(e)
     d = modinv(e, order)
-    print(d)
+    
+    with open(pubKeyFile, 'w+') as pub:
+        pub.write(str(numBits) + '\n' + str(n) + '\n' + str(e))
+        
+    with open(privKeyFile, 'w+') as priv:
+        priv.write(str(numBits) + '\n' + str(n) + '\n' + str(d))
     
