@@ -1,6 +1,15 @@
 import random
 from Crypto.Util import number
 
+def powv1 (m, e, n):
+   s = 1
+   while e != 0:
+      if e & 1:
+         s = (s * m) % n
+      e >>= 1
+      m = (m * m) % n
+   return s
+
 def readFile(funName, fileName):
     try:
         with open(fileName, 'r') as f:
@@ -23,15 +32,15 @@ def enc(keyFile, inputFile, outputFile):
         e = int(key[2])
     
     plainText = readFile('rsa-enc', inputFile)
-    
+
     # Add the padding to the plain text
     r = random.getrandbits(nBits // 2)
     r = r << (nBits - (nBits // 2) - 2)
     m = r + int(plainText)
-    
+
     # Calculate the cypher text
-    cipherText = pow(m, e, n)
-    
+    cipherText = powv1(m, e, n)
+
     with open(outputFile, 'w+') as o:
         o.write(str(cipherText))
 
@@ -48,13 +57,15 @@ def dec(keyFile, inputFile, outputFile):
         d = int(key[2])
     
     cipherText = readFile('rsa-dec', inputFile)
-    
+
     # Calculate the plain text with the padding
-    m = pow(int(cipherText), d, n)
-    
+    m = powv1(int(cipherText), d, n)
+    # print(m)
+    # print(bin(m))
+
     # Pull off the padding
     plainText = m & ((1 << nBits - (nBits // 2) - 2) - 1)
-    
+
     with open(outputFile, 'w+') as o:
         o.write(str(plainText))
     
@@ -129,10 +140,10 @@ def keygen(pubKeyFile, privKeyFile, numBits):
     order = (p - 1) * (q - 1)
     e = getCoprime(order)
     d = modinv(e, order)
-    
+
     with open(pubKeyFile, 'w+') as pub:
         pub.write(str(numBits) + '\n' + str(n) + '\n' + str(e))
-        
+
     with open(privKeyFile, 'w+') as priv:
         priv.write(str(numBits) + '\n' + str(n) + '\n' + str(d))
     
