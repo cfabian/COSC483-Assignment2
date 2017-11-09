@@ -166,15 +166,17 @@ def modinv(a, m):
     else:
         return x % m
 
-def keygen(pubKeyFile, privKeyFile, numBits):
+def keygen(pubKeyFile, privKeyFile, numBits):# COmment boxed in stuff if nothing works
+    # p = number.getPrime(int(numBits))
+    # q = number.getPrime(int(numBits))
+    #############################################
     numBits = int(numBits)
     p = random.getrandbits(numBits)
     q = random.getrandbits(numBits)
     while not miller_rabin(p,100) and not miller_rabin(q,100):
         p = random.getrandbits(numBits)
-        # p = number.getPrime(int(numBits))
-        # q = number.getPrime(int(numBits))
         q = random.getrandbits(numBits)
+    #############################################
     n = p * q
     order = (p - 1) * (q - 1)
     e = getCoprime(order)
