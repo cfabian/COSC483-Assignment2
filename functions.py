@@ -74,6 +74,7 @@ def enc(keyFile, inputFile, outputFile):
 
     # Calculate the cypher text
     cipherText = powv1(m, e, n)
+    # cipherText = pow(m,e,n)
 
     with open(outputFile, 'w+') as o:
         o.write(str(cipherText))
@@ -94,6 +95,7 @@ def dec(keyFile, inputFile, outputFile):
 
     # Calculate the plain text with the padding
     m = powv1(int(cipherText), d, n)
+    # m= pow(int(cipherText),d,n)
     # print(m)
     # print(bin(m))
 
@@ -167,15 +169,15 @@ def modinv(a, m):
         return x % m
 
 def keygen(pubKeyFile, privKeyFile, numBits):# COmment boxed in stuff if nothing works
-    # p = number.getPrime(int(numBits))
-    # q = number.getPrime(int(numBits))
+    p = number.getPrime(int(numBits))
+    q = number.getPrime(int(numBits))
     #############################################
-    numBits = int(numBits)
-    p = random.getrandbits(numBits)
-    q = random.getrandbits(numBits)
-    while not miller_rabin(p,100) and not miller_rabin(q,100):
-        p = random.getrandbits(numBits)
-        q = random.getrandbits(numBits)
+    # numBits = int(numBits)
+    # p = random.getrandbits(numBits)
+    # q = random.getrandbits(numBits)
+    # while not miller_rabin(p,100) and not miller_rabin(q,100):
+    #     p = random.getrandbits(numBits)
+    #     q = random.getrandbits(numBits)
     #############################################
     n = p * q
     order = (p - 1) * (q - 1)
